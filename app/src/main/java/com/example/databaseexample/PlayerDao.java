@@ -13,13 +13,16 @@ import java.util.List;
 public interface PlayerDao {
 
     @Query("SELECT * FROM PlayerTask ORDER BY lastName")
-    List<PlayerTask> loadAllTask();
+    List<PlayerTask> loadAllTasks();
 
     @Insert
     void insertTask(PlayerTask playerEntry);
 
     @Delete
     void deleteTask(PlayerTask playerEntry);
+
+    @Query("DELETE FROM PlayerTask")
+    public void nukeTable();
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateTask(PlayerTask playerEntry);

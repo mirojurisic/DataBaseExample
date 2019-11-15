@@ -9,6 +9,15 @@ import androidx.room.PrimaryKey;
 public class PlayerTask {
 
     private String name;
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     private String lastName;
     private String birthday;
     @PrimaryKey(autoGenerate = true)//will be added

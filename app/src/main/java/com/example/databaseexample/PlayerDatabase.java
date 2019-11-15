@@ -9,7 +9,7 @@ import androidx.room.RoomDatabase;
 @Database(entities = {PlayerTask.class},version =1 ,exportSchema = false)
 public abstract class PlayerDatabase extends RoomDatabase {
 
-    private static final String LOG_TAG = PlayerTask.class.getSimpleName();
+    private static final String LOG_TAG = PlayerDatabase.class.getSimpleName();
     private static final Object LOCK = new Object();
     private static final String DATABASE_NAME = "TOP Players";
     private static PlayerDatabase sInstance ;
@@ -20,7 +20,9 @@ public abstract class PlayerDatabase extends RoomDatabase {
             synchronized (LOCK)
             {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
-                        PlayerDatabase.class,PlayerDatabase.DATABASE_NAME).build();
+                        PlayerDatabase.class,PlayerDatabase.DATABASE_NAME)
+                        .allowMainThreadQueries()
+                        .build();
             }
         }
         return sInstance;
