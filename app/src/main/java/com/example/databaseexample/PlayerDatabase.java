@@ -21,7 +21,7 @@ public abstract class PlayerDatabase extends RoomDatabase {
             {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         PlayerDatabase.class,PlayerDatabase.DATABASE_NAME)
-                        .allowMainThreadQueries()
+                       // .allowMainThreadQueries()
                         .build();
             }
         }
