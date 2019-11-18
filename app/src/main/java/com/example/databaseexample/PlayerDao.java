@@ -27,4 +27,8 @@ public interface PlayerDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateTask(PlayerTask playerEntry);
 
+    @Query("SELECT * FROM PlayerTask WHERE _id=:id")
+    PlayerTask loadTaskById(int id);
+    
+
 }

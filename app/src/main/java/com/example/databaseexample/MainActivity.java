@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
         list_of_players = new ArrayList<>();
         list_of_players = loadAllData();
+
     }
     public void onSaveButtonClick(View w)
     {
