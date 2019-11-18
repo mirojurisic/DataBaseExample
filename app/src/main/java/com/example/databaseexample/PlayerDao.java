@@ -1,5 +1,6 @@
 package com.example.databaseexample;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface PlayerDao {
 
     @Query("SELECT * FROM PlayerTask ORDER BY lastName")
-    List<PlayerTask> loadAllTasks();
+   LiveData<List<PlayerTask>> loadAllTasks();
 
     @Insert
     void insertTask(PlayerTask playerEntry);

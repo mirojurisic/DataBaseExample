@@ -1,6 +1,8 @@
 package com.example.databaseexample;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 
 import android.os.Bundle;
 import android.view.View;
@@ -38,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
         pDB = PlayerDatabase.getInstance(getApplicationContext());
         listView = findViewById(R.id.listView);
         list_of_players = new ArrayList<>();
-        list_of_players = loadAllData();
+        loadAllData();
+        //list_of_players = loadAllData();
 
     }
     public void onSaveButtonClick(View w)
@@ -49,40 +52,30 @@ public class MainActivity extends AppCompatActivity {
         String sport = eSport.getText().toString();
         PlayerTask playerTask = new PlayerTask(name,lastName,birthday,sport);
         insertPlayerData(playerTask);
-        list_of_players = loadAllData();
+        loadAllData();
     }
 
     public void clearData(View view) {
         nukePlayerData();
 
     }
-    public List<PlayerTask> loadAllData(){
-        AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
+    //using live data to load an update database
+    // any moment when there is a change in a database onChanged will be called and update the UI !!!
+    public void loadAllData(){
+        LiveData<List<PlayerTask>> tasks = pDB.getPlayerDao().loadAllTasks();
+        tasks.observe(this, new Observer<List<PlayerTask>>() {
             @Override
-            public void run() {
-                list_of_players = pDB.getPlayerDao().loadAllTasks();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateUI();
-                    }
-                });
+            public void onChanged(List<PlayerTask> playerTasks) {
+                list_of_players= playerTasks;
+                updateUI();
             }
         });
-        return list_of_players;
     }
     public void insertPlayerData(final PlayerTask playerTask){
         AppExecutor.getInstance().getDiskIO().execute(new Runnable() {
             @Override
             public void run() {
                 pDB.getPlayerDao().insertTask(playerTask);
-                list_of_players = pDB.getPlayerDao().loadAllTasks();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateUI();
-                    }
-                });
             }
         });
     }
@@ -91,13 +84,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 pDB.getPlayerDao().nukeTable();
-                list_of_players = pDB.getPlayerDao().loadAllTasks();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        updateUI();
-                    }
-                });
             }
 
         });
